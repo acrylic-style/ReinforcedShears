@@ -1,0 +1,4 @@
+name: ReinforcedShears
+main: xyz.acrylicstyle.shears.ReinforcedShears
+version: "1.0"
+api-version: "1.15"
