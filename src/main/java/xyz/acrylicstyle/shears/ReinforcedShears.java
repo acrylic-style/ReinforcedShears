@@ -1,6 +1,7 @@
 package xyz.acrylicstyle.shears;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
@@ -9,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -21,6 +23,7 @@ public class ReinforcedShears extends JavaPlugin implements Listener {
     public static NamespacedKey u1024 = null;
     public static NamespacedKey u4096 = null;
     public static NamespacedKey u16384 = null;
+    public static NamespacedKey diamond_shears = null;
 
     public static ItemStack ui4 = null;
     public static ItemStack ui16 = null;
@@ -49,6 +52,7 @@ public class ReinforcedShears extends JavaPlugin implements Listener {
         u1024 = new NamespacedKey(this, "u1024");
         u4096 = new NamespacedKey(this, "u4096");
         u16384 = new NamespacedKey(this, "u16384");
+        diamond_shears = new NamespacedKey(this, "diamond_shears");
         ui4 = getItemStack(4);
         ui16 = getItemStack(16);
         ui64 = getItemStack(64);
@@ -56,6 +60,12 @@ public class ReinforcedShears extends JavaPlugin implements Listener {
         ui1024 = getItemStack(1024);
         ui4096 = getItemStack(4096);
         ui16384 = getItemStack(16384);
+        ItemStack diamond_shears_item = new ItemStack(Material.SHEARS);
+        ItemMeta meta = diamond_shears_item.getItemMeta();
+        meta.addEnchant(Enchantment.DIG_SPEED, 2, true);
+        meta.setUnbreakable(true);
+        meta.setDisplayName(ChatColor.AQUA + "ダイヤのハサミ");
+        diamond_shears_item.setItemMeta(meta);
         ShapelessRecipe ur4 = new ShapelessRecipe(u4, ui4);
         ShapelessRecipe ur16 = new ShapelessRecipe(u16, ui16);
         ShapelessRecipe ur64 = new ShapelessRecipe(u64, ui64);
@@ -63,7 +73,11 @@ public class ReinforcedShears extends JavaPlugin implements Listener {
         ShapelessRecipe ur1024 = new ShapelessRecipe(u1024, ui1024);
         ShapelessRecipe ur4096 = new ShapelessRecipe(u4096, ui4096);
         ShapelessRecipe ur16384 = new ShapelessRecipe(u16384, ui16384);
-        ur4.addIngredient(4, Material.SHEARS);
+        ShapedRecipe diamond_shears_recipe = new ShapedRecipe(diamond_shears, diamond_shears_item);
+        diamond_shears_recipe.shape(" D ", "DSD", " D ");
+        diamond_shears_recipe.setIngredient('D', Material.DIAMOND);
+        diamond_shears_recipe.setIngredient('S', new ItemStack(Material.SHEARS));
+        ur4.addIngredient(4, new ItemStack(Material.SHEARS));
         ur16.addIngredient(4, ui4);
         ur64.addIngredient(4, ui16);
         ur256.addIngredient(4, ui64);
@@ -77,6 +91,7 @@ public class ReinforcedShears extends JavaPlugin implements Listener {
         Bukkit.addRecipe(ur1024);
         Bukkit.addRecipe(ur4096);
         Bukkit.addRecipe(ur16384);
+        Bukkit.addRecipe(diamond_shears_recipe);
     }
 
     @Override
@@ -88,6 +103,7 @@ public class ReinforcedShears extends JavaPlugin implements Listener {
         Bukkit.removeRecipe(u1024);
         Bukkit.removeRecipe(u4096);
         Bukkit.removeRecipe(u16384);
+        Bukkit.removeRecipe(diamond_shears);
     }
 
     @EventHandler
