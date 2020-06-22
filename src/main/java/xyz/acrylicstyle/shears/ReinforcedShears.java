@@ -73,7 +73,7 @@ public class ReinforcedShears extends JavaPlugin implements Listener {
         diamond_shears_item = new ItemStack(Material.SHEARS);
         ItemMeta meta = diamond_shears_item.getItemMeta();
         meta.addEnchant(Enchantment.DIG_SPEED, 2, true);
-        meta.addEnchant(Enchantment.LUCK, 3, true);
+        meta.addEnchant(Enchantment.LOOT_BONUS_BLOCKS, 3, true);
         meta.setUnbreakable(true);
         meta.setDisplayName(ChatColor.AQUA + "ダイヤのハサミ");
         diamond_shears_item.setItemMeta(meta);
