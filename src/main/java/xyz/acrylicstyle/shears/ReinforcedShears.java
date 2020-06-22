@@ -73,6 +73,7 @@ public class ReinforcedShears extends JavaPlugin implements Listener {
         diamond_shears_item = new ItemStack(Material.SHEARS);
         ItemMeta meta = diamond_shears_item.getItemMeta();
         meta.addEnchant(Enchantment.DIG_SPEED, 2, true);
+        meta.addEnchant(Enchantment.LUCK, 3, true);
         meta.setUnbreakable(true);
         meta.setDisplayName(ChatColor.AQUA + "ダイヤのハサミ");
         diamond_shears_item.setItemMeta(meta);
@@ -157,7 +158,7 @@ public class ReinforcedShears extends JavaPlugin implements Listener {
     public void handleShear(@NotNull ItemStack item, @NotNull Location location, @NotNull String color) {
         if (diamond_shears_item.isSimilar(item)) {
             Item iteme = location.getWorld().spawn(location, Item.class);
-            iteme.setItemStack(new ItemStack(Material.valueOf(color + "_WOOL"), random.nextInt(3)));
+            iteme.setItemStack(new ItemStack(Material.valueOf(color + "_WOOL"), Math.max(1, random.nextInt(5))));
         }
     }
 }
