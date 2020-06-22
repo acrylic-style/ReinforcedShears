@@ -2,18 +2,27 @@ package xyz.acrylicstyle.shears;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.DyeColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Item;
+import org.bukkit.entity.Sheep;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockShearEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Random;
 
 public class ReinforcedShears extends JavaPlugin implements Listener {
     public static NamespacedKey u4 = null;
@@ -32,6 +41,7 @@ public class ReinforcedShears extends JavaPlugin implements Listener {
     public static ItemStack ui1024 = null;
     public static ItemStack ui4096 = null;
     public static ItemStack ui16384 = null;
+    public static ItemStack diamond_shears_item = null;
 
     public static ItemStack getItemStack(int level) {
         ItemStack item = new ItemStack(Material.SHEARS);
@@ -60,7 +70,7 @@ public class ReinforcedShears extends JavaPlugin implements Listener {
         ui1024 = getItemStack(1024);
         ui4096 = getItemStack(4096);
         ui16384 = getItemStack(16384);
-        ItemStack diamond_shears_item = new ItemStack(Material.SHEARS);
+        diamond_shears_item = new ItemStack(Material.SHEARS);
         ItemMeta meta = diamond_shears_item.getItemMeta();
         meta.addEnchant(Enchantment.DIG_SPEED, 2, true);
         meta.setUnbreakable(true);
@@ -121,6 +131,33 @@ public class ReinforcedShears extends JavaPlugin implements Listener {
                     || item.isSimilar(ui16384)) {
                 e.setCancelled(true);
             }
+        }
+    }
+
+    private static final Random random = new Random();
+
+    @EventHandler
+    public void onBlockShearEntity(BlockShearEntityEvent e) {
+        if (!(e.getEntity() instanceof Sheep)) return;
+        Sheep sheep = (Sheep) e.getEntity();
+        DyeColor color = sheep.getColor();
+        String c = color == null ? "WHITE" : color.name();
+        handleShear(e.getTool(), e.getEntity().getLocation(), c);
+    }
+
+    @EventHandler
+    public void onPlayerShearEntity(PlayerShearEntityEvent e) {
+        if (!(e.getEntity() instanceof Sheep)) return;
+        Sheep sheep = (Sheep) e.getEntity();
+        DyeColor color = sheep.getColor();
+        String c = color == null ? "WHITE" : color.name();
+        handleShear(e.getItem(), e.getEntity().getLocation(), c);
+    }
+
+    public void handleShear(@NotNull ItemStack item, @NotNull Location location, @NotNull String color) {
+        if (diamond_shears_item.isSimilar(item)) {
+            Item iteme = location.getWorld().spawn(location, Item.class);
+            iteme.setItemStack(new ItemStack(Material.valueOf(color + "_WOOL"), random.nextInt(3)));
         }
     }
 }
